@@ -1,0 +1,32 @@
+# Markdown linting rules
+# See https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md for details
+
+# Default state for all rules
+default: true
+
+# MD013/line-length - Line length
+MD013:
+  # Number of characters
+  line_length: 120
+  # Allow longer lines in code blocks
+  code_blocks: false
+  # Allow longer lines in tables
+  tables: false
+
+# MD033/no-inline-html - Inline HTML
+MD033:
+  # Allow specific HTML elements for Docker documentation
+  allowed_elements: ["img", "br", "div", "details", "summary"]
+
+# MD024/no-duplicate-heading - Multiple headings with the same content
+MD024:
+  # Allow headers with the same content as long as they are not siblings
+  siblings_only: true
+
+# MD029/ol-prefix - Ordered list item prefix
+MD029: false
+
+# MD046/code-block-style - Code block style
+MD046:
+  # Enforce fenced style for code blocks
+  style: "fenced"
