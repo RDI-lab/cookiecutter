@@ -1,0 +1,96 @@
+name: Semantic Release with Docker Build
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important: get all history for semantic release
+          persist-credentials: false # Important for semantic-release to use the GITHUB_TOKEN
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Install semantic-release and plugins locally
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install semantic-release @semantic-release/git @semantic-release/changelog @semantic-release/exec conventional-changelog-conventionalcommits
+
+      # Use the .releaserc.json file in the repository
+
+      # Run semantic-release to determine version
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+        id: semantic-release
+
+      # Get the new version from semantic-release output
+      - name: Extract version
+        id: extract_version
+        if: steps.semantic-release.outcome == 'success'
+        run: |
+          if [ -n "$VERSION" ]; then
+            echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+            echo "New version detected: ${VERSION}"
+          else
+            echo "No new version was created"
+          fi
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        if: steps.extract_version.outputs.VERSION != ''
+        uses: docker/setup-buildx-action@v2
+
+      # Login to GitHub Container Registry
+      - name: Login to GitHub Container Registry
+        if: steps.extract_version.outputs.VERSION != ''
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner}}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Extract metadata for Docker tags
+      - name: Extract Docker metadata
+        if: steps.extract_version.outputs.VERSION != ''
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=${{ steps.extract_version.outputs.VERSION }}
+            type=raw,value=latest
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}},value=${{ steps.extract_version.outputs.VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ steps.extract_version.outputs.VERSION }}
+          flavor: |
+            latest=true
+
+      # Build and push Docker image if a new version was created
+      - name: Build and push Docker image
+        if: steps.extract_version.outputs.VERSION != ''
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -1,0 +1,9 @@
+# See https://github.com/hadolint/hadolint for more information.
+failure-threshold: warning
+format: tty
+no-color: false
+no-fail: false
+ignored:
+- DL3013
+- DL3016
+- DL4006

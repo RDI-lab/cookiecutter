@@ -1,0 +1,45 @@
+{
+  "name": "Docker Development Environment",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "containerEnv": {
+    "DOCKER_BUILDKIT": "1",
+    "GITLAB_ACCESS_TOKEN": "${localEnv:GITLAB_ACCESS_TOKEN}",
+    "GITLAB_PROJECT_ID": "15957",
+    "GITLAB_USER_NAME": "${localEnv:GITLAB_USER_NAME}"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "timonwong.shellcheck",
+        "redhat.vscode-yaml",
+        "davidanson.vscode-markdownlint",
+        "streetsidesoftware.code-spell-checker",
+        "yzhang.markdown-all-in-one",
+        "github.vscode-github-actions",
+        "GitLab.gitlab-workflow"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.rulers": [120],
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "postCreateCommand": "pre-commit install",
+  "remoteUser": "vscode"
+}
