@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2](https://github.com/RDI-lab/cookiecutter/compare/v1.0.1...v1.0.2) (2025-04-11)
+
+
+### Bug Fixes
+
+* Dockerfile ([903f5c4](https://github.com/RDI-lab/cookiecutter/commit/903f5c4b9f2ac4538f0cc62a3755985f93429c51))
+
 ## [1.0.1](https://github.com/RDI-lab/cookiecutter/compare/v1.0.0...v1.0.1) (2025-04-11)
 
 
