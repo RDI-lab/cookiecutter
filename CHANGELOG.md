@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1](https://github.com/RDI-lab/cookiecutter/compare/v1.0.0...v1.0.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* create both arm64 and amd64 images ([8b50903](https://github.com/RDI-lab/cookiecutter/commit/8b50903bc4d5ac8661f7b9c9f5f3db42e5772cb3))
+
 # 1.0.0 (2025-04-10)
 
 
