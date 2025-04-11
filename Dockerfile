@@ -1,6 +1,6 @@
 FROM python:3.13.2-alpine3.21
 
-RUN apk add --no-cache python3-dev=3.12.9-r0 \
+RUN apk add --no-cache python3-dev=3.12.10-r0 \
     gcc=14.2.0-r4 \
     git=2.47.2-r0 \
     musl-dev=1.2.5-r9 \
