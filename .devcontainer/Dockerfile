@@ -1,13 +1,13 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
 # Install additional packages needed for development
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     git=1:2.34.1-1ubuntu1.12 \
     bash-completion=1:2.11-5ubuntu1 \
     curl=7.81.0-1ubuntu1.20 \
-    gnupg=2.2.27-3ubuntu2.1 \
+    gnupg=2.2.27-3ubuntu2.3 \
     lsb-release=11.1.0ubuntu4 \
-    vim=2:8.2.3995-1ubuntu2.23 \
+    vim=2:8.2.3995-1ubuntu2.24 \
     jq=1.6-2.1ubuntu3 \
     unzip=6.0-26ubuntu3.2 \
     make=4.3-4.1build1 \
@@ -40,7 +40,7 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 	&& chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
 	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
 	&& apt-get update \
-	&& apt-get install --no-install-recommends gh -y
+	&& apt-get install --no-install-recommends gh=2.69.0 -y
 
 # # Set up a non-root user for better security
 ARG USERNAME=vscode
@@ -50,3 +50,18 @@ RUN mkdir -p /home/$USERNAME/.docker \
     && chown -R $USERNAME:$USERNAME /home/$USERNAME/.docker
 
 USER $USERNAME
+
+
+# git=1:2.34.1-1ubuntu1.12 \
+# bash-completion=1:2.11-5ubuntu1 \
+# curl=7.81.0-1ubuntu1.20 \
+# gnupg=2.2.27-3ubuntu2.1 \
+# lsb-release=11.1.0ubuntu4 \
+# vim=2:8.2.3995-1ubuntu2.23 \
+# jq=1.6-2.1ubuntu3 \
+# unzip=6.0-26ubuntu3.2 \
+# make=4.3-4.1build1 \
+# nodejs=12.22.9~dfsg-1ubuntu3.6 \
+# npm=8.5.1~ds-1 \
+# python3-pip=22.0.2+dfsg-1ubuntu0.5 \
+# wget \
